@@ -1,6 +1,7 @@
 "use client";
 
 import { motion, Variants } from "framer-motion";
+import type { Easing } from "framer-motion";
 import { ServiceCard } from "./ServiceCard";
 
 const container: Variants = {
@@ -10,7 +11,7 @@ const container: Variants = {
 
 const item: Variants = {
   hidden: { opacity: 0, y: 36 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.65, ease: "easeOut" as const } },
+  show: { opacity: 1, y: 0, transition: { duration: 0.65, ease: "easeOut" as Easing } },
 };
 
 interface ServiceCardsProps {
