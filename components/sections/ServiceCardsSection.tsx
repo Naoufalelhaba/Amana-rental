@@ -10,7 +10,7 @@ const container: Variants = {
 
 const item: Variants = {
   hidden: { opacity: 0, y: 36 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.65, ease: "easeOut" } },
+  show: { opacity: 1, y: 0, transition: { duration: 0.65, ease: "easeOut" as const } },
 };
 
 interface ServiceCardsProps {
