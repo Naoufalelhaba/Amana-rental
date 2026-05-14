@@ -16,9 +16,26 @@ import { FAQ } from "@/components/sections/FAQ";
 import { CTASection } from "@/components/sections/CTASection";
 
 export const metadata: Metadata = {
-  title: "Notre Approche",
+  title: "Notre Méthode de Gestion Immobilière — Processus & Garanties",
   description:
-    "Une gestion encadrée, maîtrisée et sécurisée. Découvrez la méthodologie AMANA RENTAL et ses garde-fous.",
+    "Méthodologie AMANA RENTAL : sélection rigoureuse des locataires, processus documentés, contrôles réguliers et reporting mensuel pour une gestion immobilière sans risque au Maroc.",
+  alternates: {
+    canonical: "/notre-approche",
+  },
+  openGraph: {
+    title: "Notre Approche — Gestion Immobilière Encadrée | AMANA RENTAL",
+    description:
+      "Processus documentés, contrôles internes, reporting mensuel. Découvrez comment AMANA RENTAL sécurise et optimise la gestion de votre bien au Maroc.",
+    url: "/notre-approche",
+    images: [
+      {
+        url: "/images/og-default.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Notre Approche AMANA RENTAL — Gestion Immobilière Encadrée au Maroc",
+      },
+    ],
+  },
 };
 
 const SAFEGUARDS = [
@@ -114,19 +131,25 @@ const FAQ_ITEMS = [
   },
 ];
 
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: FAQ_ITEMS.map((item) => ({
+    "@type": "Question",
+    name: item.question,
+    acceptedAnswer: { "@type": "Answer", text: item.answer },
+  })),
+};
+
 export default function NotreApprochePage() {
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
       {/* Hero */}
       <section className="bg-primary pt-20 sm:pt-28 lg:pt-32 pb-12 sm:pb-16 lg:pb-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
-        <div className="absolute inset-0 opacity-10">
-          <Image
-            src="/images/hero-approche.jpg"
-            alt="Notre approche AMANA RENTAL"
-            fill
-            className="object-cover"
-          />
-        </div>
         <div className="container-tight relative z-10">
           <SectionTitle
             eyebrow="Notre approche"

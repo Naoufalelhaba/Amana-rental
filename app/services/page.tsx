@@ -6,9 +6,26 @@ import { ServiceCardsSection } from "@/components/sections/ServiceCardsSection";
 import { CTASection } from "@/components/sections/CTASection";
 
 export const metadata: Metadata = {
-  title: "Services",
+  title: "Gestion Locative & Conciergerie Immobilière au Maroc",
   description:
-    "Gestion locative longue durée et conciergerie saisonnière. Deux expertises complémentaires pour valoriser votre bien au Maroc.",
+    "Gestion locative longue durée et conciergerie saisonnière (Airbnb, Booking) au Maroc. Sélection de locataires, encaissement, reporting mensuel. Pack Meublé inclus.",
+  alternates: {
+    canonical: "/services",
+  },
+  openGraph: {
+    title: "Services de Gestion Locative & Conciergerie | AMANA RENTAL",
+    description:
+      "Deux expertises complémentaires : gestion locative longue durée et conciergerie saisonnière. Valorisez votre bien au Maroc avec AMANA RENTAL.",
+    url: "/services",
+    images: [
+      {
+        url: "/images/og-default.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Services AMANA RENTAL — Gestion Locative et Conciergerie au Maroc",
+      },
+    ],
+  },
 };
 
 const LONGUE_DUREE_FEATURES = [
@@ -63,19 +80,62 @@ const PROCESS_STEPS = [
   },
 ];
 
+const servicesSchema = {
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  name: "Services AMANA RENTAL",
+  itemListElement: [
+    {
+      "@type": "ListItem",
+      position: 1,
+      item: {
+        "@type": "Service",
+        name: "Gestion Locative Longue Durée",
+        description:
+          "Sélection rigoureuse des locataires, rédaction et gestion du bail, encaissement des loyers, suivi des charges, coordination des interventions, reporting mensuel.",
+        provider: { "@type": "RealEstateAgent", name: "AMANA RENTAL" },
+        areaServed: { "@type": "Country", name: "Maroc" },
+        serviceType: "Property Management",
+      },
+    },
+    {
+      "@type": "ListItem",
+      position: 2,
+      item: {
+        "@type": "Service",
+        name: "Conciergerie Saisonnière",
+        description:
+          "Gestion des annonces Airbnb et Booking, accueil des voyageurs, ménage professionnel, optimisation tarifaire, reporting mensuel de performance.",
+        provider: { "@type": "RealEstateAgent", name: "AMANA RENTAL" },
+        areaServed: { "@type": "Country", name: "Maroc" },
+        serviceType: "Concierge Service",
+      },
+    },
+    {
+      "@type": "ListItem",
+      position: 3,
+      item: {
+        "@type": "Service",
+        name: "Pack Meublé & Mise en Valeur",
+        description:
+          "Sélection du mobilier, aménagement, photographie professionnelle, constitution du kit de bienvenue, optimisation pour la location courte durée.",
+        provider: { "@type": "RealEstateAgent", name: "AMANA RENTAL" },
+        areaServed: { "@type": "Country", name: "Maroc" },
+        serviceType: "Interior Design and Staging",
+      },
+    },
+  ],
+};
+
 export default function ServicesPage() {
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(servicesSchema) }}
+      />
       {/* Hero */}
       <section className="bg-primary pt-20 sm:pt-28 lg:pt-32 pb-12 sm:pb-16 lg:pb-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
-        <div className="absolute inset-0 opacity-10">
-          <Image
-            src="/images/hero-services.jpg"
-            alt="Services AMANA RENTAL"
-            fill
-            className="object-cover"
-          />
-        </div>
         <div className="container-tight relative z-10">
           <SectionTitle
             eyebrow="Nos services"

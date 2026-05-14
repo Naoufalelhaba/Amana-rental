@@ -35,10 +35,10 @@ export function Navbar() {
   return (
     <header
       className={cn(
-        "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
+        "fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b",
         isTransparent
-          ? "bg-transparent"
-          : "bg-white/95 backdrop-blur-sm shadow-sm border-b border-border"
+          ? "bg-white/0 shadow-none border-transparent"
+          : "bg-white/95 backdrop-blur-sm shadow-sm border-border"
       )}
     >
       {/* Gold accent line */}

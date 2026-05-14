@@ -4,9 +4,26 @@ import { ContactForm } from "@/components/forms/ContactForm";
 import { SectionTitle } from "@/components/sections/SectionTitle";
 
 export const metadata: Metadata = {
-  title: "Contact",
+  title: "Contact & Évaluation Gratuite de Votre Bien",
   description:
-    "Confiez-nous votre bien. Contactez l'équipe AMANA RENTAL pour discuter de votre projet de gestion locative ou conciergerie immobilière.",
+    "Contactez AMANA RENTAL pour une évaluation gratuite de votre bien locatif au Maroc. Gestion locative, conciergerie immobilière — réponse sous 24h ouvrées.",
+  alternates: {
+    canonical: "/contact",
+  },
+  openGraph: {
+    title: "Contact & Évaluation Gratuite | AMANA RENTAL",
+    description:
+      "Contactez AMANA RENTAL pour discuter de votre projet de gestion locative ou conciergerie. Évaluation gratuite de votre bien — réponse sous 24h.",
+    url: "/contact",
+    images: [
+      {
+        url: "/images/og-default.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Contacter AMANA RENTAL — Gestion Locative au Maroc",
+      },
+    ],
+  },
 };
 
 const contactInfo = [

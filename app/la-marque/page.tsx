@@ -6,9 +6,26 @@ import { PillarCard } from "@/components/sections/PillarCard";
 import { CTASection } from "@/components/sections/CTASection";
 
 export const metadata: Metadata = {
-  title: "La Marque",
+  title: "La Marque — Histoire & Valeurs d'AMANA RENTAL",
   description:
-    "Découvrez l'histoire et la philosophie d'AMANA RENTAL, partenaire structuré de gestion immobilière au Maroc.",
+    "Découvrez l'histoire et les valeurs d'AMANA RENTAL : confiance, rigueur, transparence. Le partenaire structuré de gestion immobilière au Maroc.",
+  alternates: {
+    canonical: "/la-marque",
+  },
+  openGraph: {
+    title: "La Marque — Histoire & Valeurs d'AMANA RENTAL",
+    description:
+      "Découvrez l'histoire et les valeurs d'AMANA RENTAL, partenaire de gestion immobilière au Maroc fondé sur la confiance et la transparence.",
+    url: "/la-marque",
+    images: [
+      {
+        url: "/images/og-default.jpg",
+        width: 1200,
+        height: 630,
+        alt: "AMANA RENTAL — La Marque, Histoire & Valeurs",
+      },
+    ],
+  },
 };
 
 const VALUES = [
@@ -37,14 +54,6 @@ export default function LaMaquePage() {
     <>
       {/* Hero */}
       <section className="bg-primary pt-20 sm:pt-28 lg:pt-32 pb-12 sm:pb-16 lg:pb-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
-        <div className="absolute inset-0 opacity-10">
-          <Image
-            src="/images/hero-brand.jpg"
-            alt="AMANA RENTAL"
-            fill
-            className="object-cover"
-          />
-        </div>
         <div className="container-tight relative z-10">
           <SectionTitle
             eyebrow="La Marque"

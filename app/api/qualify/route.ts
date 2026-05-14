@@ -1,12 +1,26 @@
 import { NextResponse } from "next/server";
+import { z } from "zod";
 import nodemailer from "nodemailer";
-import { contactSchema } from "@/lib/validators";
 
-const TYPE_BIEN_LABELS: Record<string, string> = {
+const qualifySchema = z.object({
+  projet: z.string().min(1, "Veuillez sélectionner votre projet."),
+  typeBien: z.string().min(1, "Veuillez sélectionner le type de bien."),
+  ville: z.string().min(2, "Veuillez indiquer la ville."),
+  nom: z.string().min(2, "Veuillez saisir votre nom."),
+  telephone: z.string().min(8, "Numéro de téléphone invalide."),
+  email: z.string().email("Adresse e-mail invalide."),
+});
+
+const PROJET_LABELS: Record<string, string> = {
+  "location-longue-duree": "Mise en location longue durée",
+  "conciergerie-saisonniere": "Conciergerie saisonnière",
+  "renseignement": "Je me renseigne",
+};
+
+const BIEN_LABELS: Record<string, string> = {
   "appartement": "Appartement",
   "villa": "Villa",
-  "bureau": "Bureau",
-  "local-commercial": "Local commercial",
+  "immeuble": "Immeuble",
   "autre": "Autre",
 };
 
@@ -17,7 +31,7 @@ export async function POST(request: Request) {
     try {
       body = await request.json();
     } catch (parseError) {
-      console.error("🚨 ERREUR API CONTACT — parse JSON :", parseError);
+      console.error("🚨 ERREUR API QUALIFY — parse JSON :", parseError);
       return NextResponse.json(
         { success: false, error: "Corps de la requête invalide (JSON attendu)." },
         { status: 400 }
@@ -25,19 +39,19 @@ export async function POST(request: Request) {
     }
 
     // ── 2. Validation Zod ─────────────────────────────────────────────────────
-    const result = contactSchema.safeParse(body);
+    const result = qualifySchema.safeParse(body);
     if (!result.success) {
       return NextResponse.json(
-        { error: result.error.flatten() },
+        { success: false, error: result.error.flatten() },
         { status: 400 }
       );
     }
 
-    const { nom, email, telephone, typeBien, ville, message } = result.data;
+    const { projet, typeBien, ville, nom, telephone, email } = result.data;
 
     // ── 3. Vérification variable d'environnement ──────────────────────────────
     if (!process.env.EMAIL_PASS) {
-      console.error("🚨 ERREUR API CONTACT — EMAIL_PASS introuvable dans .env.local");
+      console.error("🚨 ERREUR API QUALIFY — EMAIL_PASS introuvable dans .env.local");
       return NextResponse.json(
         { success: false, error: "Configuration serveur manquante (EMAIL_PASS)." },
         { status: 500 }
@@ -46,33 +60,33 @@ export async function POST(request: Request) {
 
     // ── 4. Construction du corps HTML ─────────────────────────────────────────
     const emailHtml = `
-      <h2 style="color:#123C35;font-family:sans-serif">Nouveau message de contact — Amana Rental</h2>
+      <h2 style="color:#123C35;font-family:sans-serif">Nouveau prospect QCM — Amana Rental</h2>
       <table cellpadding="10" style="border-collapse:collapse;font-family:sans-serif;font-size:14px">
         <tr style="background:#f9fafb">
-          <td><strong>Nom</strong></td>
-          <td>${nom}</td>
-        </tr>
-        <tr>
-          <td><strong>E-mail</strong></td>
-          <td><a href="mailto:${email}">${email}</a></td>
-        </tr>
-        <tr style="background:#f9fafb">
-          <td><strong>Téléphone</strong></td>
-          <td>${telephone || "—"}</td>
+          <td><strong>Projet</strong></td>
+          <td>${PROJET_LABELS[projet] ?? projet}</td>
         </tr>
         <tr>
           <td><strong>Type de bien</strong></td>
-          <td>${TYPE_BIEN_LABELS[typeBien] ?? typeBien}</td>
+          <td>${BIEN_LABELS[typeBien] ?? typeBien}</td>
         </tr>
         <tr style="background:#f9fafb">
           <td><strong>Ville</strong></td>
           <td>${ville}</td>
         </tr>
+        <tr>
+          <td><strong>Nom</strong></td>
+          <td>${nom}</td>
+        </tr>
+        <tr style="background:#f9fafb">
+          <td><strong>Téléphone</strong></td>
+          <td>${telephone}</td>
+        </tr>
+        <tr>
+          <td><strong>E-mail</strong></td>
+          <td><a href="mailto:${email}">${email}</a></td>
+        </tr>
       </table>
-      <h3 style="color:#123C35;font-family:sans-serif;margin-top:24px">Message</h3>
-      <p style="font-family:sans-serif;font-size:14px;line-height:1.6;background:#f9fafb;padding:16px;border-radius:6px">
-        ${message.replace(/\n/g, "<br>")}
-      </p>
     `;
 
     // ── 5. Envoi Nodemailer ───────────────────────────────────────────────────
@@ -87,14 +101,14 @@ export async function POST(request: Request) {
     await transporter.sendMail({
       from: "system.amanarental@gmail.com",
       to: "n.elhaba@gmail.com",
-      subject: `Nouveau message de contact — ${nom}`,
+      subject: "Nouveau prospect QCM - Amana Rental",
       html: emailHtml,
     });
 
     return NextResponse.json({ success: true }, { status: 200 });
 
   } catch (error) {
-    console.error("🚨 ERREUR API CONTACT :", error);
+    console.error("🚨 ERREUR API QUALIFY :", error);
     return NextResponse.json(
       {
         success: false,

@@ -13,9 +13,26 @@ import { PillarCard } from "@/components/sections/PillarCard";
 import { CTASection } from "@/components/sections/CTASection";
 
 export const metadata: Metadata = {
-  title: "Investisseurs & Propriétaires",
+  title: "Pour Investisseurs, Propriétaires & MRE au Maroc",
   description:
-    "Optimisez et sécurisez vos revenus locatifs au Maroc. Solution dédiée aux investisseurs, propriétaires et MRE.",
+    "Investisseurs, propriétaires et MRE : optimisez vos revenus locatifs au Maroc. +18% de revenus nets, 97% d'occupation, gestion à distance avec reporting mensuel transparent.",
+  alternates: {
+    canonical: "/investisseurs-proprietaires",
+  },
+  openGraph: {
+    title: "Pour Investisseurs & MRE — Gestion Locative | AMANA RENTAL",
+    description:
+      "Investisseurs, propriétaires et MRE : confiez votre bien au Maroc à AMANA RENTAL. Gestion à distance, reporting transparent, revenus optimisés.",
+    url: "/investisseurs-proprietaires",
+    images: [
+      {
+        url: "/images/og-default.jpg",
+        width: 1200,
+        height: 630,
+        alt: "AMANA RENTAL — Pour Investisseurs et MRE au Maroc",
+      },
+    ],
+  },
 };
 
 const BENEFITS = [
@@ -66,14 +83,6 @@ export default function InvestisseursPage() {
     <>
       {/* Hero */}
       <section className="bg-primary pt-20 sm:pt-28 lg:pt-32 pb-12 sm:pb-16 lg:pb-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
-        <div className="absolute inset-0 opacity-10">
-          <Image
-            src="/images/hero-investisseurs.jpg"
-            alt="Investisseurs AMANA RENTAL"
-            fill
-            className="object-cover"
-          />
-        </div>
         <div className="container-tight relative z-10">
           <SectionTitle
             eyebrow="Investisseurs & Propriétaires"
@@ -125,7 +134,7 @@ export default function InvestisseursPage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center">
             <div className="relative aspect-[4/3] rounded-xl overflow-hidden order-2 lg:order-1">
               <Image
-                src="/images/investisseurs-patrimoine.jpg"
+                src="/images/investisseur.png"
                 alt="Immeuble de qualité — valorisation patrimoniale et gestion locative AMANA RENTAL"
                 fill
                 className="object-cover"
