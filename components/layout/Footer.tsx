@@ -83,7 +83,7 @@ export function Footer() {
             <ul className="space-y-4">
               <li className="flex items-start gap-3">
                 <Phone className="w-4 h-4 text-accent flex-shrink-0 mt-0.5" />
-                <span className="text-white/60 text-sm">+212 6 XX XX XX XX</span>
+                <a href="tel:+21206255054" className="text-white/60 text-sm hover:text-white transition-colors">+212 06255054</a>
               </li>
               <li className="flex items-start gap-3">
                 <Mail className="w-4 h-4 text-accent flex-shrink-0 mt-0.5" />
@@ -97,7 +97,7 @@ export function Footer() {
               <li className="flex items-start gap-3">
                 <MapPin className="w-4 h-4 text-accent flex-shrink-0 mt-0.5" />
                 <span className="text-white/60 text-sm">
-                  Casablanca, Maroc
+                  Angle Mostafa Maani et 11 Janvier, Casablanca
                 </span>
               </li>
             </ul>

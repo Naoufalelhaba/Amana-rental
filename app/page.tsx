@@ -7,7 +7,6 @@ import {
   TrendingUp,
 } from "lucide-react";
 import { Hero } from "@/components/sections/Hero";
-import { LeadQualifier } from "@/components/sections/LeadQualifier";
 import { HomeServicesTeaser } from "@/components/sections/HomeServicesTeaser";
 import { HomeReassurance } from "@/components/sections/HomeReassurance";
 import { SectionTitle } from "@/components/sections/SectionTitle";
@@ -145,8 +144,6 @@ export default function HomePage() {
         imageSrc="/images/hero-accueil.png"
         imageAlt="Résidence premium gérée par AMANA RENTAL — gestion locative haut de gamme au Maroc"
       />
-
-      <LeadQualifier />
 
       <HomeServicesTeaser />
 

@@ -93,12 +93,13 @@ const organizationSchema = {
     "Partenaire structuré de gestion immobilière au Maroc. Gestion locative longue durée et conciergerie saisonnière pour propriétaires exigeants, investisseurs et MRE.",
   address: {
     "@type": "PostalAddress",
+    streetAddress: "Angle Mostafa Maani et 11 Janvier",
     addressLocality: "Casablanca",
     addressCountry: "MA",
   },
   contactPoint: {
     "@type": "ContactPoint",
-    telephone: "+212600000000",
+    telephone: "+21206255054",
     contactType: "customer service",
     availableLanguage: "French",
     hoursAvailable: {

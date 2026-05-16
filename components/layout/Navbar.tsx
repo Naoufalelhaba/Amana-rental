@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Lock } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const LINKS = [
@@ -30,7 +30,8 @@ export function Navbar() {
     setMobileOpen(false);
   }, [pathname]);
 
-  const isTransparent = !isScrolled && !mobileOpen;
+  const isDashboard = pathname === "/dashboard";
+  const isTransparent = !isScrolled && !mobileOpen && !isDashboard;
 
   return (
     <header
@@ -99,8 +100,8 @@ export function Navbar() {
             })}
           </nav>
 
-          {/* Desktop CTA */}
-          <div className="hidden md:block">
+          {/* Desktop CTAs */}
+          <div className="hidden md:flex items-center gap-2">
             <Link
               href="/contact"
               className={cn(
@@ -111,6 +112,18 @@ export function Navbar() {
               )}
             >
               Nous contacter
+            </Link>
+            <Link
+              href="/dashboard"
+              className={cn(
+                "inline-flex items-center gap-1.5 rounded-lg px-3.5 py-2 text-sm font-medium border transition-all",
+                isTransparent
+                  ? "border-accent/60 text-accent hover:border-accent hover:bg-accent/10"
+                  : "border-primary/30 text-primary hover:border-primary hover:bg-primary/5"
+              )}
+            >
+              <Lock className="w-3.5 h-3.5" />
+              Mon Espace Client
             </Link>
           </div>
 
@@ -158,7 +171,14 @@ export function Navbar() {
               </Link>
             );
           })}
-          <div className="pt-3 border-t border-border mt-2">
+          <div className="pt-3 border-t border-border mt-2 space-y-2">
+            <Link
+              href="/dashboard"
+              className="flex items-center justify-center gap-2 w-full rounded-lg border border-primary/30 text-primary text-sm font-medium px-4 py-3 hover:bg-primary/5 transition-all"
+            >
+              <Lock className="w-3.5 h-3.5" />
+              Mon Espace Client
+            </Link>
             <Link
               href="/contact"
               className="block w-full text-center rounded-lg bg-primary hover:bg-primary/90 text-white text-sm font-medium px-4 py-3 transition-all"

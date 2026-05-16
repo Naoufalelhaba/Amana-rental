@@ -30,8 +30,8 @@ const contactInfo = [
   {
     icon: Phone,
     label: "Téléphone",
-    value: "+212 6 XX XX XX XX",
-    href: "tel:+212600000000",
+    value: "+212 06255054",
+    href: "tel:+21206255054",
   },
   {
     icon: Mail,
@@ -42,7 +42,7 @@ const contactInfo = [
   {
     icon: MapPin,
     label: "Adresse",
-    value: "Casablanca, Maroc",
+    value: "Angle Mostafa Maani et 11 Janvier, Casablanca",
     href: undefined,
   },
   {
