@@ -29,9 +29,15 @@ export const metadata: Metadata = {
 const contactInfo = [
   {
     icon: Phone,
-    label: "Téléphone",
-    value: "+212 06255054",
-    href: "tel:+21206255054",
+    label: "Téléphone Maroc",
+    value: "+212 7 06 25 50 54",
+    href: "tel:+212706255054",
+  },
+  {
+    icon: Phone,
+    label: "Téléphone France",
+    value: "+33 6 95 05 26 66",
+    href: "tel:+33695052666",
   },
   {
     icon: Mail,
@@ -41,8 +47,8 @@ const contactInfo = [
   },
   {
     icon: MapPin,
-    label: "Adresse",
-    value: "Angle Mostafa Maani et 11 Janvier, Casablanca",
+    label: "Localités",
+    value: "Casablanca, Marrakech",
     href: undefined,
   },
   {

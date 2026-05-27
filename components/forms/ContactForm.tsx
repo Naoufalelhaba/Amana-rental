@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { CheckCircle, AlertCircle, Loader2 } from "lucide-react";
+import { CheckCircle, AlertCircle, Loader2, ChevronDown } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
@@ -13,8 +13,28 @@ import { cn } from "@/lib/utils";
 
 type SubmitStatus = "idle" | "loading" | "success" | "error";
 
+const DIAL_CODES = [
+  { code: "+212", flag: "🇲🇦", label: "Maroc" },
+  { code: "+33", flag: "🇫🇷", label: "France" },
+  { code: "+32", flag: "🇧🇪", label: "Belgique" },
+  { code: "+34", flag: "🇪🇸", label: "Espagne" },
+  { code: "+41", flag: "🇨🇭", label: "Suisse" },
+  { code: "+971", flag: "🇦🇪", label: "Émirats arabes" },
+  { code: "+966", flag: "🇸🇦", label: "Arabie Saoudite" },
+  { code: "+974", flag: "🇶🇦", label: "Qatar" },
+  { code: "+213", flag: "🇩🇿", label: "Algérie" },
+  { code: "+216", flag: "🇹🇳", label: "Tunisie" },
+  { code: "+44", flag: "🇬🇧", label: "Royaume-Uni" },
+  { code: "+1", flag: "🇺🇸", label: "États-Unis" },
+  { code: "+49", flag: "🇩🇪", label: "Allemagne" },
+  { code: "+39", flag: "🇮🇹", label: "Italie" },
+  { code: "+351", flag: "🇵🇹", label: "Portugal" },
+  { code: "+31", flag: "🇳🇱", label: "Pays-Bas" },
+];
+
 export function ContactForm() {
   const [submitStatus, setSubmitStatus] = useState<SubmitStatus>("idle");
+  const [phoneIndicatif, setPhoneIndicatif] = useState("+212");
 
   const {
     register,
@@ -28,10 +48,14 @@ export function ContactForm() {
   const onSubmit = async (data: ContactFormData) => {
     setSubmitStatus("loading");
     try {
+      const payload = {
+        ...data,
+        telephone: data.telephone ? `${phoneIndicatif} ${data.telephone}` : "",
+      };
       const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
+        body: JSON.stringify(payload),
       });
       if (res.ok) {
         setSubmitStatus("success");
@@ -75,7 +99,7 @@ export function ContactForm() {
           </Label>
           <Input
             id="nom"
-            placeholder="Mohammed Alami"
+            placeholder=""
             {...register("nom")}
             className={cn(errors.nom && "border-destructive focus-visible:ring-destructive")}
           />
@@ -93,7 +117,7 @@ export function ContactForm() {
           <Input
             id="email"
             type="email"
-            placeholder="m.alami@exemple.ma"
+            placeholder=""
             {...register("email")}
             className={cn(errors.email && "border-destructive focus-visible:ring-destructive")}
           />
@@ -112,13 +136,37 @@ export function ContactForm() {
           <Label htmlFor="telephone" className="text-sm font-medium">
             Téléphone
           </Label>
-          <Input
-            id="telephone"
-            type="tel"
-            placeholder="+212 6 XX XX XX XX"
-            {...register("telephone")}
-            className={cn(errors.telephone && "border-destructive focus-visible:ring-destructive")}
-          />
+          <div
+            className={cn(
+              "flex h-9 w-full overflow-hidden rounded-lg border border-input bg-transparent text-sm transition-colors focus-within:border-ring focus-within:ring-3 focus-within:ring-ring/50",
+              errors.telephone && "border-destructive focus-within:border-destructive focus-within:ring-destructive/20"
+            )}
+          >
+            {/* Indicatif selector */}
+            <div className="relative flex items-center border-r border-input flex-shrink-0">
+              <select
+                value={phoneIndicatif}
+                onChange={(e) => setPhoneIndicatif(e.target.value)}
+                aria-label="Indicatif téléphonique"
+                className="h-full appearance-none bg-transparent pl-2.5 pr-6 text-sm text-foreground focus:outline-none cursor-pointer"
+              >
+                {DIAL_CODES.map((dc) => (
+                  <option key={dc.code} value={dc.code}>
+                    {dc.flag} {dc.code}
+                  </option>
+                ))}
+              </select>
+              <ChevronDown className="pointer-events-none absolute right-1.5 w-3 h-3 text-muted-foreground" />
+            </div>
+            {/* Numéro local */}
+            <input
+              id="telephone"
+              type="tel"
+              placeholder=""
+              {...register("telephone")}
+              className="min-w-0 flex-1 bg-transparent px-2.5 py-1 placeholder:text-muted-foreground focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+            />
+          </div>
           {errors.telephone && (
             <p className="text-xs text-destructive flex items-center gap-1">
               <AlertCircle className="w-3 h-3" />
@@ -161,7 +209,7 @@ export function ContactForm() {
         </Label>
         <Input
           id="ville"
-          placeholder="Casablanca"
+          placeholder=""
           {...register("ville")}
           className={cn(errors.ville && "border-destructive focus-visible:ring-destructive")}
         />

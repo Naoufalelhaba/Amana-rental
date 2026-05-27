@@ -5,7 +5,7 @@ export const contactSchema = z.object({
   email: z.string().email("Adresse e-mail invalide."),
   telephone: z
     .string()
-    .regex(/^[0-9+\s\-().]{8,20}$/, "Numéro de téléphone invalide.")
+    .regex(/^[0-9\s\-().]{6,15}$/, "Numéro de téléphone invalide.")
     .optional()
     .or(z.literal("")),
   typeBien: z.enum(["appartement", "villa", "bureau", "local-commercial", "autre"], {

@@ -3,6 +3,15 @@
     "id": "5565babd-6267-44ef-ade3-57139324768a",
     "name": "Naoufal Test",
     "email": "n.elhaba@gmail.com",
-    "password": "$2b$10$HJccRYEzkCDR8SAKybSg4ece/k1r3JOyHqE22ds1ZFAdNRt0jULma"
+    "password": "$2b$10$yWnkywUnkPulIJTsqrIave6VXLoQWXjvoygLWeOa2BsV33jIxfsV.",
+    "role": "admin"
+  },
+  {
+    "id": "7ac5e5b8-960d-4799-8ad6-316436827707",
+    "name": "Amine EL HABA",
+    "email": "naoufal.elhaba@gmail.com",
+    "password": "$2b$10$c9WMKwWJOpFXmFZeLgu9P.Yzteee1h4OS.4biO62k2Avx0cT/KKWO",
+    "role": "client",
+    "mustChangePassword": false
   }
 ]

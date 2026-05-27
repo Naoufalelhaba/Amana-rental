@@ -30,8 +30,8 @@ export function Navbar() {
     setMobileOpen(false);
   }, [pathname]);
 
-  const isDashboard = pathname === "/dashboard";
-  const isTransparent = !isScrolled && !mobileOpen && !isDashboard;
+  const isSolidPage = pathname.startsWith("/dashboard") || pathname.startsWith("/admin");
+  const isTransparent = !isScrolled && !mobileOpen && !isSolidPage;
 
   return (
     <header

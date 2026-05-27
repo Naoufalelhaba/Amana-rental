@@ -2,8 +2,8 @@ import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 import { decrypt } from '@/lib/session'
 
-const PROTECTED = ['/dashboard']
-const AUTH_ONLY = ['/login']
+const PROTECTED = ['/dashboard', '/admin']
+const AUTH_ONLY = ['/login', '/forgot-password', '/reset-password']
 
 export default async function proxy(req: NextRequest) {
   const { pathname } = req.nextUrl
@@ -17,6 +17,11 @@ export default async function proxy(req: NextRequest) {
 
   if (isProtected && !isLoggedIn) {
     return NextResponse.redirect(new URL('/login', req.nextUrl))
+  }
+
+  // Protéger /admin : rôle admin requis
+  if (pathname.startsWith('/admin') && isLoggedIn && session?.role !== 'admin') {
+    return NextResponse.redirect(new URL('/dashboard', req.nextUrl))
   }
 
   if (isAuthOnly && isLoggedIn) {

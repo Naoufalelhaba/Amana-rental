@@ -8,6 +8,8 @@ export type SessionPayload = {
   userId: string
   email: string
   name: string
+  role: string
+  mustChangePassword?: boolean
   expiresAt: Date
 }
 
@@ -37,9 +39,9 @@ export async function decrypt(token: string | undefined = ''): Promise<SessionPa
   }
 }
 
-export async function createSession(userId: string, email: string, name: string) {
+export async function createSession(userId: string, email: string, name: string, role = 'client', mustChangePassword = false) {
   const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
-  const token = await encrypt({ userId, email, name, expiresAt })
+  const token = await encrypt({ userId, email, name, role, mustChangePassword, expiresAt })
   const cookieStore = await cookies()
 
   cookieStore.set(COOKIE_NAME, token, {

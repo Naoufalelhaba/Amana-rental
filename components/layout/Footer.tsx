@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { Mail, Phone, MapPin, Globe, ExternalLink } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
@@ -26,11 +27,15 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
           {/* Col 1 — Brand */}
           <div>
-            <div className="flex items-center gap-2 mb-4">
-              <div className="w-8 h-8 rounded bg-accent flex items-center justify-center font-bold text-sm text-white">
-                AR
-              </div>
-              <span className="font-semibold text-base tracking-wide text-white">
+            <div className="flex items-center gap-3 mb-4">
+              <Image
+                src="/images/logo1.png"
+                alt="AMANA RENTAL"
+                width={60}
+                height={60}
+                className="w-12 h-12 object-contain"
+              />
+              <span className="font-semibold text-lg tracking-wide text-white">
                 AMANA RENTAL
               </span>
             </div>
@@ -81,9 +86,12 @@ export function Footer() {
               Contact
             </h3>
             <ul className="space-y-4">
-              <li className="flex items-start gap-3">
-                <Phone className="w-4 h-4 text-accent flex-shrink-0 mt-0.5" />
-                <a href="tel:+21206255054" className="text-white/60 text-sm hover:text-white transition-colors">+212 06255054</a>
+              <li className="flex items-center gap-3">
+                <Phone className="w-4 h-4 text-accent flex-shrink-0" />
+                <div className="space-y-1">
+                  <a href="tel:+212706255054" className="text-white/60 text-sm hover:text-white transition-colors block">+212 7 06 25 50 54</a>
+                  <a href="tel:+33695052666" className="text-white/60 text-sm hover:text-white transition-colors block">+33 6 95 05 26 66</a>
+                </div>
               </li>
               <li className="flex items-start gap-3">
                 <Mail className="w-4 h-4 text-accent flex-shrink-0 mt-0.5" />
@@ -97,7 +105,7 @@ export function Footer() {
               <li className="flex items-start gap-3">
                 <MapPin className="w-4 h-4 text-accent flex-shrink-0 mt-0.5" />
                 <span className="text-white/60 text-sm">
-                  Angle Mostafa Maani et 11 Janvier, Casablanca
+                  Casablanca, Marrakech
                 </span>
               </li>
             </ul>
@@ -112,7 +120,7 @@ export function Footer() {
 
         <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
           <p className="text-white/40 text-xs">
-            © {year} AMANA RENTAL. Tous droits réservés.
+            © {year} AMANA RENTAL. Tous droits réservés. AMANA RENTAL est une marque déposée par la société Morocco Real Estate Performance.
           </p>
           <div className="flex items-center gap-6">
             {LEGAL_LINKS.map((link, i) => (

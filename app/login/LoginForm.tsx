@@ -3,6 +3,7 @@
 import { useActionState, useState } from 'react'
 import { login } from '@/app/actions/auth'
 import { Eye, EyeOff, Lock, Mail } from 'lucide-react'
+import Link from 'next/link'
 
 export function LoginForm() {
   const [state, action, pending] = useActionState(login, undefined)
@@ -36,9 +37,17 @@ export function LoginForm() {
       </div>
 
       <div className="space-y-1.5">
-        <label htmlFor="password" className="block text-sm font-medium text-foreground">
-          Mot de passe
-        </label>
+        <div className="flex items-center justify-between">
+          <label htmlFor="password" className="block text-sm font-medium text-foreground">
+            Mot de passe
+          </label>
+          <Link
+            href="/forgot-password"
+            className="text-xs text-[#C6A75E] hover:underline font-medium"
+          >
+            Mot de passe oublié ?
+          </Link>
+        </div>
         <div className="relative">
           <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
           <input

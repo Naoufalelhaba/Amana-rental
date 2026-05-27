@@ -1,7 +1,10 @@
 import type { Metadata } from 'next'
+import { redirect } from 'next/navigation'
 import { verifySession } from '@/lib/dal'
 import { logout } from '@/app/actions/auth'
-import { LogOut, Building2, TrendingUp, CalendarClock, FileText, Download, AlertCircle } from 'lucide-react'
+import { DashboardRefresher } from '@/components/dashboard/DashboardRefresher'
+import { LogOut, Building2, TrendingUp, CalendarClock, FileText, Download, AlertCircle, KeyRound, ShieldCheck } from 'lucide-react'
+import Link from 'next/link'
 
 export const metadata: Metadata = {
   title: 'Mon Tableau de Bord — AMANA RENTAL',
@@ -32,7 +35,7 @@ type LocationRecord = {
   }
 }
 
-// ─── Airtable fetch ──────────────────────────────────────────────────────────
+// ─── Airtable fetch (pas de cache — données toujours fraîches) ───────────────
 
 async function getLocations(email: string): Promise<LocationRecord[]> {
   const baseId = process.env.AIRTABLE_BASE_ID
@@ -42,12 +45,12 @@ async function getLocations(email: string): Promise<LocationRecord[]> {
     throw new Error('Variables Airtable manquantes dans .env.local')
   }
 
-  const formula = encodeURIComponent(`{Email Client}="${email}"`)
+  const formula = encodeURIComponent(`LOWER({Email Client})="${email.toLowerCase()}"`)
   const url = `https://api.airtable.com/v0/${baseId}/Locations?filterByFormula=${formula}`
 
   const res = await fetch(url, {
     headers: { Authorization: `Bearer ${token}` },
-    next: { revalidate: 300 },
+    cache: 'no-store',
   })
 
   if (!res.ok) {
@@ -95,6 +98,7 @@ function StatusBadge({ status }: { status?: string }) {
 
 export default async function DashboardPage() {
   const session = await verifySession()
+  if (session.mustChangePassword) redirect('/dashboard/change-password')
 
   let locations: LocationRecord[] = []
   let fetchError: string | null = null
@@ -123,15 +127,36 @@ export default async function DashboardPage() {
               Bonjour, {session.name}
             </h1>
           </div>
-          <form action={logout}>
-            <button
-              type="submit"
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-white/20 hover:border-white/40 hover:bg-white/10 text-sm font-medium text-white/90 transition-all"
+          <div className="flex items-center gap-2">
+            <DashboardRefresher />
+            <Link
+              href="/dashboard/change-password"
+              className="inline-flex items-center gap-2 px-3 py-2 rounded-lg border border-white/20 hover:border-white/40 hover:bg-white/10 text-sm font-medium text-white/90 transition-all"
+              title="Modifier mon mot de passe"
             >
-              <LogOut className="w-4 h-4" />
-              <span className="hidden sm:inline">Se déconnecter</span>
-            </button>
-          </form>
+              <KeyRound className="w-4 h-4" />
+              <span className="hidden sm:inline">Mot de passe</span>
+            </Link>
+            {session.role === 'admin' && (
+              <Link
+                href="/admin"
+                className="inline-flex items-center gap-2 px-3 py-2 rounded-lg border border-[#C6A75E]/40 hover:border-[#C6A75E]/60 hover:bg-[#C6A75E]/10 text-sm font-medium text-[#C6A75E] transition-all"
+                title="Administration"
+              >
+                <ShieldCheck className="w-4 h-4" />
+                <span className="hidden sm:inline">Admin</span>
+              </Link>
+            )}
+            <form action={logout}>
+              <button
+                type="submit"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-white/20 hover:border-white/40 hover:bg-white/10 text-sm font-medium text-white/90 transition-all"
+              >
+                <LogOut className="w-4 h-4" />
+                <span className="hidden sm:inline">Se déconnecter</span>
+              </button>
+            </form>
+          </div>
         </div>
         {/* Ligne or */}
         <div className="h-0.5 bg-gradient-to-r from-transparent via-[#C6A75E] to-transparent" />
@@ -212,7 +237,7 @@ export default async function DashboardPage() {
                             {formatCurrency(f['Revenus Générés'])}
                           </td>
                           <td className="px-6 py-4">
-                            <div className="flex items-center justify-center gap-2">
+                            <div className="flex flex-col items-start gap-1.5">
                               {docs.length === 0 ? (
                                 <span className="text-xs text-muted-foreground">—</span>
                               ) : (
@@ -227,7 +252,7 @@ export default async function DashboardPage() {
                                     className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-md bg-[#123C35]/5 hover:bg-[#123C35]/10 text-[#123C35] text-xs font-medium transition-colors"
                                   >
                                     <FileText className="w-3.5 h-3.5" />
-                                    <span className="max-w-[100px] truncate">{doc.filename}</span>
+                                    <span className="max-w-[120px] truncate">{doc.filename}</span>
                                     <Download className="w-3 h-3 flex-shrink-0" />
                                   </a>
                                 ))
@@ -266,7 +291,7 @@ export default async function DashboardPage() {
                         </div>
                       </div>
                       {docs.length > 0 && (
-                        <div className="flex flex-wrap gap-2 pt-1">
+                        <div className="flex flex-col gap-1.5 pt-1">
                           {docs.map(doc => (
                             <a
                               key={doc.id}

@@ -15,24 +15,7 @@ import { FAQ } from "@/components/sections/FAQ";
 export const metadata: Metadata = {
   title: "AMANA RENTAL — Gestion Locative Premium au Maroc",
   description:
-    "Confiez votre bien à AMANA RENTAL : gestion locative longue durée et conciergerie saisonnière au Maroc. Reporting mensuel, +18% de revenus nets, 97% d'occupation.",
-  alternates: {
-    canonical: "/",
-  },
-  openGraph: {
-    title: "AMANA RENTAL — Gestion Locative Premium au Maroc",
-    description:
-      "Confiez votre bien à AMANA RENTAL. Gestion locative longue durée, conciergerie saisonnière, reporting mensuel pour propriétaires exigeants au Maroc.",
-    url: "/",
-    images: [
-      {
-        url: "/images/og-default.jpg",
-        width: 1200,
-        height: 630,
-        alt: "AMANA RENTAL — Gestion Locative Premium au Maroc",
-      },
-    ],
-  },
+    "Partenaire structuré de gestion immobilière au Maroc. Gestion locative longue durée et conciergerie saisonnière pour propriétaires exigeants, investisseurs et MRE.",
 };
 
 
@@ -116,23 +99,9 @@ const FAQ_ITEMS = [
   },
 ];
 
-const faqSchema = {
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  mainEntity: FAQ_ITEMS.map((item) => ({
-    "@type": "Question",
-    name: item.question,
-    acceptedAnswer: { "@type": "Answer", text: item.answer },
-  })),
-};
-
 export default function HomePage() {
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
-      />
       {/* Hero */}
       <Hero
         eyebrow="Partenaire de gestion immobilière au Maroc"
@@ -141,7 +110,7 @@ export default function HomePage() {
         subtitle="AMANA RENTAL gère votre bien locatif avec rigueur, transparence et une méthode éprouvée — pour que vous encaissiez sans vous inquiéter."
         primaryCta={{ label: "Nous confier votre bien", href: "/contact" }}
         secondaryCta={{ label: "Découvrir notre approche", href: "/notre-approche" }}
-        imageSrc="/images/hero-accueil.png"
+        imageSrc="/images/hero-acceuil1.png"
         imageAlt="Résidence premium gérée par AMANA RENTAL — gestion locative haut de gamme au Maroc"
       />
 
