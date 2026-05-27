@@ -15,16 +15,20 @@ export type ResetToken = {
   expiresAt: string
 }
 
-const useRedis = Boolean(
-  process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN
-)
+// Support both Upstash native env vars and Vercel KV legacy env vars
+const redisUrl =
+  process.env.UPSTASH_REDIS_REST_URL ||
+  process.env.KV_REST_API_URL
+
+const redisToken =
+  process.env.UPSTASH_REDIS_REST_TOKEN ||
+  process.env.KV_REST_API_TOKEN
+
+const useRedis = Boolean(redisUrl && redisToken)
 
 async function getRedis() {
   const { Redis } = await import('@upstash/redis')
-  return new Redis({
-    url: process.env.UPSTASH_REDIS_REST_URL!,
-    token: process.env.UPSTASH_REDIS_REST_TOKEN!,
-  })
+  return new Redis({ url: redisUrl!, token: redisToken! })
 }
 
 // ─── File-based (local dev) ──────────────────────────────────────────────────

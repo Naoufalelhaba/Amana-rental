@@ -97,13 +97,17 @@ export async function adminCreateUser(state: ActionState, formData: FormData): P
   })
   await saveUsers(users)
 
+  // Email: fire-and-forget with 5s timeout (Vercel blocks SMTP so we don't block the response)
   if (process.env.EMAIL_PASS) {
-    try {
+    const loginUrl = `${process.env.NEXT_PUBLIC_SITE_URL ?? 'https://amana-rental.com'}/login`
+    const emailWork = async () => {
       const transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: { user: 'system.amanarental@gmail.com', pass: process.env.EMAIL_PASS },
+        connectionTimeout: 4000,
+        socketTimeout: 4000,
+        greetingTimeout: 4000,
       })
-      const loginUrl = `${process.env.NEXT_PUBLIC_SITE_URL ?? 'https://amana-rental.com'}/login`
       await transporter.sendMail({
         from: '"AMANA RENTAL" <system.amanarental@gmail.com>',
         to: email,
@@ -130,9 +134,12 @@ export async function adminCreateUser(state: ActionState, formData: FormData): P
           </div>
         `,
       })
-    } catch (err) {
-      console.error('welcome email error:', err)
     }
+
+    await Promise.race([
+      emailWork(),
+      new Promise<void>(resolve => setTimeout(resolve, 5000)),
+    ]).catch(err => console.error('welcome email error:', err))
   }
 
   return { success: true }
