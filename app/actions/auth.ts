@@ -3,34 +3,9 @@
 import { redirect } from 'next/navigation'
 import bcrypt from 'bcryptjs'
 import { createSession, deleteSession, getSession } from '@/lib/session'
-import { readFileSync, writeFileSync } from 'fs'
-import path from 'path'
+import { getUsers, saveUsers } from '@/lib/db'
 import { randomUUID } from 'crypto'
 import nodemailer from 'nodemailer'
-
-type User = {
-  id: string
-  name: string
-  email: string
-  password: string
-  role?: string
-  mustChangePassword?: boolean
-}
-
-const USERS_PATH = path.join(process.cwd(), 'data', 'users.json')
-
-function getUsers(): User[] {
-  try {
-    const raw = readFileSync(USERS_PATH, 'utf-8')
-    return JSON.parse(raw) as User[]
-  } catch {
-    return []
-  }
-}
-
-function saveUsers(users: User[]) {
-  writeFileSync(USERS_PATH, JSON.stringify(users, null, 2), 'utf-8')
-}
 
 export type ActionState = { error?: string; success?: boolean } | undefined
 export type LoginState = { error: string } | undefined
@@ -43,7 +18,7 @@ export async function login(state: LoginState, formData: FormData): Promise<Logi
     return { error: 'Veuillez remplir tous les champs.' }
   }
 
-  const users = getUsers()
+  const users = await getUsers()
   const user = users.find(u => u.email.toLowerCase() === email)
 
   if (!user) {
@@ -76,7 +51,7 @@ export async function changePassword(state: ActionState, formData: FormData): Pr
   if (next.length < 8) return { error: 'Le nouveau mot de passe doit contenir au moins 8 caractères.' }
   if (next !== confirm) return { error: 'Les mots de passe ne correspondent pas.' }
 
-  const users = getUsers()
+  const users = await getUsers()
   const idx = users.findIndex(u => u.id === session.userId)
   if (idx === -1) return { error: 'Utilisateur introuvable.' }
 
@@ -86,7 +61,7 @@ export async function changePassword(state: ActionState, formData: FormData): Pr
   const wasForced = users[idx].mustChangePassword === true
   users[idx].password = await bcrypt.hash(next, 10)
   users[idx].mustChangePassword = false
-  saveUsers(users)
+  await saveUsers(users)
 
   const u = users[idx]
   await createSession(u.id, u.email, u.name, u.role ?? 'client', false)
@@ -107,7 +82,7 @@ export async function adminCreateUser(state: ActionState, formData: FormData): P
   if (!name || !email || !password) return { error: 'Tous les champs sont requis.' }
   if (password.length < 8) return { error: 'Le mot de passe doit contenir au moins 8 caractères.' }
 
-  const users = getUsers()
+  const users = await getUsers()
   if (users.some(u => u.email.toLowerCase() === email)) {
     return { error: 'Un compte avec cet email existe déjà.' }
   }
@@ -120,7 +95,7 @@ export async function adminCreateUser(state: ActionState, formData: FormData): P
     role: 'client',
     mustChangePassword: true,
   })
-  saveUsers(users)
+  await saveUsers(users)
 
   if (process.env.EMAIL_PASS) {
     try {

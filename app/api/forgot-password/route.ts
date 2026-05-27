@@ -1,26 +1,7 @@
 import { NextResponse } from 'next/server'
 import nodemailer from 'nodemailer'
-import { readFileSync, writeFileSync } from 'fs'
-import path from 'path'
 import { randomBytes } from 'crypto'
-
-type User = { id: string; name: string; email: string; password: string; role?: string }
-type ResetToken = { token: string; email: string; expiresAt: string }
-
-const USERS_PATH = path.join(process.cwd(), 'data', 'users.json')
-const TOKENS_PATH = path.join(process.cwd(), 'data', 'reset-tokens.json')
-
-function getUsers(): User[] {
-  try { return JSON.parse(readFileSync(USERS_PATH, 'utf-8')) } catch { return [] }
-}
-
-function getTokens(): ResetToken[] {
-  try { return JSON.parse(readFileSync(TOKENS_PATH, 'utf-8')) } catch { return [] }
-}
-
-function saveTokens(tokens: ResetToken[]) {
-  writeFileSync(TOKENS_PATH, JSON.stringify(tokens, null, 2), 'utf-8')
-}
+import { getUsers, getTokens, saveTokens } from '@/lib/db'
 
 export async function POST(request: Request) {
   try {
@@ -30,20 +11,20 @@ export async function POST(request: Request) {
     }
 
     const normalizedEmail = email.trim().toLowerCase()
-    const user = getUsers().find(u => u.email.toLowerCase() === normalizedEmail)
+    const user = (await getUsers()).find(u => u.email.toLowerCase() === normalizedEmail)
 
     // Toujours retourner succès pour éviter l'énumération d'emails
     if (!user) return NextResponse.json({ success: true })
 
     const now = new Date()
-    const activeTokens = getTokens().filter(t => new Date(t.expiresAt) > now)
+    const activeTokens = (await getTokens()).filter(t => new Date(t.expiresAt) > now)
 
     const token = randomBytes(32).toString('hex')
     const expiresAt = new Date(now.getTime() + 60 * 60 * 1000).toISOString()
 
     const withoutOld = activeTokens.filter(t => t.email !== normalizedEmail)
     withoutOld.push({ token, email: normalizedEmail, expiresAt })
-    saveTokens(withoutOld)
+    await saveTokens(withoutOld)
 
     if (!process.env.EMAIL_PASS) {
       return NextResponse.json({ error: 'Configuration serveur manquante.' }, { status: 500 })
